@@ -1,5 +1,22 @@
+// Fibonnaci memoization approach
+function fibMemoized(n, savedFibs = {}) {
+  if (n <= 0) { return 0 }
+  if (n <= 2) { return 1 }
 
+  if (!savedFibs[n-1]) {
+    savedFibs[n-1] = fib(n - 1, savedFibs)
+  }
 
+  if (!savedFibs[n-2]) {
+    savedFibs[n-2] = fib(n - 2, savedFibs)
+  }
+
+  return savedFibs[n-1] + savedFibs[n-2]
+}
+
+// console.log(fibMemoized(50))
+// 1) fib(5) + fib()
+// 2) fib(3) + fib(4)
 
 
 // ************************************
