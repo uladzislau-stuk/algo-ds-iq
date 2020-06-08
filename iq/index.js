@@ -1,6 +1,20 @@
-const {isObject, log} = require('../utils/helpers')
-// https://www.toptal.com/javascript/interview-questions
+'use strict'
 
+const {isObject, isPrototype, log} = require('../utils/helpers')
+
+// https://www.codementor.io/@nihantanu/21-essential-javascript-tech-interview-practice-questions-answers-du107p62z
+
+// What is the drawback of creating true private methods in JS
+var Employee = function () {
+	// Private method
+	var privateMethod = function () {
+		this.salary = this.salary + 1000;
+	}
+}
+// they are very memory-inefficient, as new copy of the method
+// would be created for each instance
+
+// https://www.toptal.com/javascript/interview-questions
 
 // Closure?
 // Function which has access to outer variables
