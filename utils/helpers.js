@@ -13,6 +13,7 @@ const isInteger = x => typeof x === 'number' && x % 1 === 0
 const isNaN = x => Number.isNaN(x)
 
 const log = text => console.log(text)
+const logT = obj => console.table(obj)
 
 module.exports = {
 	isObject,
@@ -20,5 +21,6 @@ module.exports = {
 	isArr,
 	isInteger,
 	isNaN,
-	log
+	log,
+	logT
 }

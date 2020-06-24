@@ -1,5 +1,49 @@
 const {isArr, isPrototype, log} = require('../utils/helpers')
 
+/* Find Longest Common Subsequence */
+
+// lcs('dalbcmabcora', 'badlfmabcorfdga') => 'abc'
+//  2 + lcs('ab', 'am')
+// 			lcs('a', 'am') = 1 + lcs('ab', 'a') = 1
+// 				lcs('', 'am') = 0 + lcs('a', 'a') = 1 + lcs('a', 'a') = 1 + lcs('ab', '') = 0
+// Answer 3 ?
+
+// 'vbcbrbfc', 'ambrc'
+// 'bcbb' 'ambrc'
+// 'cbb' 'ambrc'
+
+// longest common subsequence
+// work wrong
+function lcs(str1 = '', str2 = '', sequence = '') {
+	var tempSequence = ''
+	var start = -1
+	var tempStart = -1
+	var shortStr1
+
+	if (!str1.length || !str2.length) return ''
+
+	for (var i = 0; i < str1.length; i++) {
+		tempStart = str2.indexOf(str1[i], start)
+		if (tempStart > -1) {
+			start = tempStart + 1
+			tempSequence += str1[i]
+		}
+	}
+
+	if (tempSequence.length > sequence.length) {
+		sequence = tempSequence
+	}
+
+	shortStr1 = str1.slice(1)
+
+	if (sequence.length > shortStr1.length) {
+		return sequence
+	}
+
+	return lcs(shortStr1, str2, sequence)
+}
+
+log(lcs('frholgl', 'afmbrrcopgflu'))
 
 /*************/
 /*** Object ***/
