@@ -5,44 +5,43 @@
 
 // Knuth–Morris–Pratt (KMP) Pattern Matching Substring Search
 // https://www.youtube.com/watch?v=BXCEFAzhxGY
+// https://www.youtube.com/watch?v=GTJr8OvyEVQ
 // KMP Substring Search
-// ABAABA
-// AB
 // Find all the patterns that matches in a given string `str`
 // this algorithm is based on the Knuth–Morris–Pratt algorithm. Its beauty consists in that it performs the matching in O(n)
-
 // Construct a table with table[i] as the length of the longest prefix of the substring 0..i
 
-function myLongestPrefix(str) {
-	var table = new Array(str.length)
-	var maxPrefix = 0
-	console.log(table)
-}
-
-myLongestPrefix('dd')
-
 function longestPrefix(str) {
-	/*
-	* |0|1|2|3|4|5|6|7|8|
-	* |d|d|m|b|a|а|m|b|a|
-	* */
 	// create a table of size equal to the length of `str`
 	// table[i] will store the prefix of the longest prefix of the substring str[0..i]
-	var table = new Array(str.length);
-	var maxPrefix = 0;
+	var table = new Array(str.length)
+	var maxPrefix = 0
 	// the longest prefix of the substring str[0] has length
-	table[0] = 0;
+	table[0] = 0
 
 	// for the substrings the following substrings, we have two cases
+	/*
+	*
+	* |d|d|d|m|b|a|а|m|b|a|
+	*  0 1 2 3 4 5 6 7 8 9
+	*
+	* |0|1|2|0|0|0|0|0|0|0|
+	* i=0
+	* maxP=0
+	*
+	* 1) maxP = 0, i = 1
+	* 	d = d, maxP = 1, table[1] = 1
+	* 2) maxP = 1, i = 2
+	* 	d = d, maxP = 2, table[2] = 2
+	* 3) maxP = 2, i = 3
+	*   d != m, maxP = table[maxP - 1], maxP = 1
+	*   d != m, maxP = table[maxP - 1], maxP = 0
+	*   table[3] = maxP, maxP = 0
+	* 4) ...
+	* */
 	for (var i = 1; i < str.length; i++) {
-		// case 1. the current character doesn't match the last character of the longest prefix
-		while (maxPrefix > 0 && str.charAt(i) !== str.charAt(maxPrefix)) {
-			// if that is the case, we have to backtrack, and try find a character  that will be equal to the current character
-			// if we reach 0, then we couldn't find a character
-			maxPrefix = table[maxPrefix - 1];
-		}
-		// case 2. The last character of the longest prefix matches the current character in `str`
-		if (str.charAt(maxPrefix) === str.charAt(i)) {
+		// case 1. The character of the longest prefix matches the current character in `str`
+		if (str[maxPrefix] === str[i]) {
 			// if that is the case, we know that the longest prefix at position i has one more character.
 			// for example consider `-` be any character not contained in the set [a-c]
 			// str = abc----abc
@@ -52,29 +51,42 @@ function longestPrefix(str) {
 			maxPrefix++;
 			// so the max prefix for table[9] is 3
 		}
-		table[i] = maxPrefix;
+
+		// case 2. the current character doesn't match the last character of the longest prefix
+		while (maxPrefix > 0 && str[i] !== str[maxPrefix]) {
+			// if that is the case, we have to backtrack, and try find a character  that will be equal to the current character
+			// if we reach 0, then we couldn't find a character
+			// maxPrefix = 0
+			maxPrefix = table[maxPrefix - 1]
+		}
+		table[i] = maxPrefix
 	}
 	return table;
 }
 
-console.log(longestPrefix('ddmbaаmba'))
+console.log(kmpMatching('ddmdddmfadd', 'dddm'))
 
 function kmpMatching(str, pattern) {
 	// find the prefix table in O(n)
-	var prefixes = longestPrefix(pattern);
+	// |0|1|2|0|0|0|0|0|0|0|
+	var prefixes = longestPrefix(pattern)
 	var matches = [];
+
+	// S = ddmdddmfadd
+	// P = ddm
 
 	// `j` is the index in `P`
 	var j = 0;
 	// `i` is the index in `S`
 	var i = 0;
+
 	while (i < str.length) {
 		// Case 1.  S[i] == P[j] so we move to the next index in `S` and `P`
 		if (str.charAt(i) === pattern.charAt(j)) {
 			i++;
 			j++;
 		}
-		// Case 2.  `j` is equal to the length of `P`
+		// Case 2. `j` is equal to the length of `P`
 		// that means that we reached the end of `P` and thus we found a match
 		if (j === pattern.length) {
 			matches.push(i-j);
@@ -84,6 +96,8 @@ function kmpMatching(str, pattern) {
 			// e.g.
 			// S =  a b a b d e
 			// P = `a b`a b
+			// Prefixes = |0|0|1|2|
+			//             0 1 2 3
 			// we will jump to `a b` and we will compare d and a in the next iteration
 			// a b a b `d` e
 			//     a b `a` b
