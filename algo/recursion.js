@@ -1,5 +1,37 @@
 // flatten
 
+/*
+* FIND SUM OF NUMBERS
+* */
+
+// const arr = [1, [2,3,[5]], 5, 18, [[1,2,[10]]]]
+function findSumSolutionOne(arr) {
+	const sum = 0;
+	
+	const getSum = (arr, sum) => {
+		for (const arrElement of arr) {
+			if (Array.isArray(arrElement)) {
+				sum = getSum(arrElement, sum)
+			} else {
+				sum += arrElement
+			}
+		}
+		
+		return sum
+	}
+	
+	return getSum(arr, 0)
+}
+// console.log(findSumSolutionOne(arr)) // 47
+
+// const arr = [1, [2,3,[5]], 5, 18, [[1,2,[10]]]]
+function findSumSolutionTwo(arr) {
+	if (!arr.length) {
+		return 0
+	}
+	return arr.flat(Infinity).reduce((acc, num) => (acc += num), 0)
+}
+// console.log(findSumSolutionTwo(arr)) // 47
 
 // reverse
 // e + reverse(r)
@@ -30,10 +62,90 @@ function fibTabulation(n) {
 	return arr[n]
 }
 
-// Fibonnaci memoization approach - solve problems from top to bottom
+/*
+* FIBONACCI RECURSION
+* (4!)
+*
+* 4 * fib(3)
+* 3 * fib(2)
+* 2 * fib(1)
+*
+* 4 * 6 = 24
+* 3 * 2
+* 2 * 1
+* */
+function fibonacci(num) {
+	if (num <= 1) {
+		return num
+	}
+	
+	return num * fibonacci(num - 1)
+}
+
+/*
+ * FIBONACCI NUMBER AT GIVEN INDEX - O(n)
+ * (6)
+ *
+ * [0,1]
+ * [0,1,1]
+ * [0,1,1,2]
+ * [0,1,1,2,3]
+ * [0,1,1,2,3,5]
+ * [0,1,1,2,3,5,8]
+ * */
+function fibonacciAtGivenIndex(idx) {
+	let fibo = [0,1]
+	
+	if (idx < 0) {
+		return -1
+	}
+	
+	for (let i = 2; i <= idx; i++) {
+		let num = fibo[i - 1] + fibo[i - 2]
+		fibo[i] = num
+	}
+	
+	return fibo[idx]
+}
+
+// console.log(fibonacciAtGivenIndex(2)) // 1
+// console.log(fibonacciAtGivenIndex(3)) // 2
+// console.log(fibonacciAtGivenIndex(4)) // 3
+// console.log(fibonacciAtGivenIndex(5)) // 5
+// console.log(fibonacciAtGivenIndex(6)) // 8
+
+/*
+ * RECURSION FIBONACCI NUMBER BY GIVEN INDEX - O(2^n)
+ * 					fib(4)
+ * 				fib(3)	fib(2)
+ * 			fib(2)	fib(1)	fib(1)	fib(0)
+ * 		fib(1)	fib(0)	fib(1)
+ * */
+function fibonacciRecursion(n) {
+	// basic case
+	if (n < 2) {
+		return n
+	}
+	
+	return fibonacciRecursion(n - 1) + fibonacciRecursion(n - 2)
+}
+
+/*
+* RECURSION MEMOIZED FIBONACCI NUMBER BY GIVEN INDEX - O(n)
+* 						fib (5)
+* 					fib (4) = 3 fib(3)
+* 				fib (3) = 2 fib(2) = 1
+* 			 fib(2) = 1 fib(1) = 1 fib(1) fib(0)
+* */
+
 function fibMemoized(n, savedFibs = {}) {
-	if (n <= 0) { return 0 }
-	if (n <= 2) { return 1 }
+	if (n <= 0) {
+		return 0
+	}
+	
+	if (n <= 2) {
+		return 1
+	}
 
 	if (!savedFibs[n-1]) {
 		savedFibs[n-1] = fibMemoized(n - 1, savedFibs)
@@ -46,21 +158,6 @@ function fibMemoized(n, savedFibs = {}) {
 	return savedFibs[n-1] + savedFibs[n-2]
 }
 
-// console.log(fibMemoized(5))
-// function fibMemoized(n, savedFibs = {}) {
-// 	if (n <= 0) { return 0 }
-// 	if (n <= 2) { return 1 }
-//
-// 	if (!savedFibs[n-1]) {
-// 		savedFibs[n-1] = fibMemoized(n - 1, savedFibs)
-// 	}
-//
-// 	if (!savedFibs[n-2]) {
-// 		savedFibs[n-2] = fibMemoized(n - 2, savedFibs)
-// 	}
-//
-// 	return savedFibs[n-1] + savedFibs[n-2]
-// }
 
 // product of the numbers
 function productOfArrays(arr = []) {

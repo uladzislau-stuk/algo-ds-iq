@@ -64,7 +64,7 @@ function longestPrefix(str) {
 	return table;
 }
 
-console.log(kmpMatching('ddmdddmfadd', 'dddm'))
+// console.log(kmpMatching('ddmdddmfadd', 'dddm'))
 
 function kmpMatching(str, pattern) {
 	// find the prefix table in O(n)
@@ -140,7 +140,7 @@ function naiveSearch(long, short) {
 	return count
 }
 
-console.log(naiveSearch('omgbuomgjomgfgfgfg', 'omg'))
+// console.log(naiveSearch('omgbuomgjomgfgfgfg', 'omg'))
 
 function myNaiveStringSearch(longestStr, str) {
 	let count = 0
@@ -161,40 +161,67 @@ function myNaiveStringSearch(longestStr, str) {
 
 // console.log(myNaiveStringSearch('omgbuomgjfdfdggdomgomghj', 'omg'))
 
-// faster than linear search
-// works only for sorted arrays
-// [1, 2, 3, 5, 8, 10, 12, 15]
-//  S		 M				E
-// [1, 2, 3, 5, 8, 10, 12, 15]
-// 	S  M  E
-// [1, 2, 3, 5, 8, 10, 12, 15]
-// SME
+/*
+* BINARY SEARCH - O(log n)
+*
+* Faster than linear search
+* Works only for sorted arrays
+*
+*  S     M      E
+* [1, 2, 3, 8, 15]
+*
+* S   ME
+* [1, 2]
+*
+* SE
+* [1]
+* */
+
 function binarySearch(arr, val) {
 	let start = 0
 	let end = arr.length - 1
-	// returns the largest integer less than or equal to a given number
-	let middle = Math.floor((start + end) / 2)
-
-	if (val < arr[start] || val > arr[end]) return -1
-
-	while (arr[middle] !== val) {
-		if (arr[middle] > val) end = middle - 1
-		else start = middle + 1
-		middle = Math.floor((start + end) / 2)
+	
+	while (start <= end) {
+		let midIndex = Math.floor((start + end) / 2)
+		let mid = arr[midIndex]
+		
+		if (mid === val) {
+			return midIndex
+		} else if (val < mid) {
+			end = midIndex - 1
+		} else {
+			start = midIndex + 1
+		}
 	}
-
-	return arr[middle] === val ? middle : -1
+	
+	return -1
 }
-// console.log(binarySearch([1, 2, 3, 5, 8, 10, 12, 15], 1000))
 
+// const arr = [1, 2, 3, 8, 15]
+// console.log(binarySearch(arr, -5)) // -1
+// console.log(binarySearch(arr, 1)) // 0
+// console.log(binarySearch(arr, 8)) // 3
+// console.log(binarySearch(arr, 15)) // 4
+// console.log(binarySearch(arr, 18)) // -1
+
+/*
+* LINEAR SEARCH - O(n)
+*
+* Slower than binary search for long lists
+* */
 function linearSearch(arr, val) {
-	let isFound = -1
-
 	for (let i = 0; i < arr.length; i++) {
-		if (arr[i] === val) return i
+		if (arr[i] === val) {
+			return i
+		}
 	}
 
-	return isFound
+	return -1
 }
 
-// console.log(linearSearch([34,5,45], 6))
+// const arr = [1, 2, 3, 8, 15]
+// console.log(linearSearch(arr, -3)) // -1
+// console.log(linearSearch(arr, 1)) // 0
+// console.log(linearSearch(arr, 8)) // 3
+// console.log(linearSearch(arr, 15)) // 4
+// console.log(linearSearch(arr, 19)) // -1

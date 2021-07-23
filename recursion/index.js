@@ -41,6 +41,7 @@ console.log(makeTree(categories))
 
 // flat object
 // {a:1, b: {a: 1, b: {a: 5, b: 8, c: {c: 4, g: 12}}}}
+// #1
 function flat(obj, level = 0) {
   var flatObj = {}
 
@@ -59,6 +60,29 @@ function flat(obj, level = 0) {
   return flatObj
 }
 var obj = {a:1, b: {a: 1, b: {a: 5, b: 8, c: {c: 4, g: 12}}}}
+
+// #2
+// function flat(obj, level = 0, currentLevel = 0) {
+//   let flatObj = {}
+//   let isFlatObject = true
+//
+//   Object.entries(obj).forEach(([key, val]) => {
+//     if (typeof val === 'object') {
+//       isFlatObject = false
+//       flatObj = {...flatObj, ...val}
+//     } else {
+//       flatObj[key] = val
+//     }
+//   })
+//
+//   if (!isFlatObject && currentLevel < level) {
+//     return flat(flatObj, level, currentLevel + 1)
+//   }
+//
+//   return flatObj
+// }
+// flat(obj, 100)
+
 var flatObj = flat(obj, 0)
 // console.log(flatObj)
 
