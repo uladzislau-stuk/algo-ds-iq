@@ -1,4 +1,4 @@
-class HashTableExample {
+class Example {
   
   table = new Array(5)
   numItems = 0
@@ -59,7 +59,7 @@ class HashTableExample {
   }
 }
 
-const hashTable = new HashTableExample()
+const hashTable = new Example()
 hashTable.setItem('firstName', 'bob')
 hashTable.setItem('lastName', 'tim')
 hashTable.setItem('firstName', 'vlad')

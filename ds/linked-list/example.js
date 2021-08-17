@@ -12,7 +12,7 @@ class Node {
 // 1) Remove/add last
 const n1 = new Node(100)
 
-class LinkedList {
+class Example {
   constructor() {
     this.head = null
     this.tail = null
@@ -141,7 +141,7 @@ class LinkedList {
   }
 }
 
-const ll = new LinkedList()
+const ll = new Example()
 
 ll.insetFirst(100)
 ll.insetFirst(200)

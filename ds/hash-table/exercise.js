@@ -43,6 +43,7 @@ function HashTable(size = 10) {
 
 HashTable.prototype.RANDOM_VALUE = 18422;
 
+// main hash function
 HashTable.prototype._hash = function (key) {
   var hashFunction = function (numericKey, randomValue, size) {
     return (numericKey * randomValue) % size;
@@ -79,6 +80,8 @@ HashTable.prototype._hash = function (key) {
   }
 };
 
+// calculation GCD, (5,2) -> (5-2,2) -> (3, 2) -> (3-2,2) -> (1, 2-1) -> (1,1)
+// GCD = 1
 HashTable.prototype._greatestCommonDenominator = function (a, b) {
   if (a === b) {
     return a
@@ -93,37 +96,21 @@ HashTable.prototype._greatestCommonDenominator = function (a, b) {
   return a
 }
 
+// resolution collisions using open addressing technique
 HashTable.prototype._setLinearProbingFn = function() {
   let a = 2
+  // calculate gcd
   let gcd = this._greatestCommonDenominator(a, this.tableSize)
   
+  // linearProbingFn can probe al if gcd === 1
   while (gcd !== 1) {
     a = a + 1
     gcd = this._greatestCommonDenominator(a, this.tableSize)
   }
   
+  // linearProbingFn = (x) => ax + b, where a,b constants
   this.linearProbingFn = (x) => a * x + 4
 }
-
-HashTable.prototype.setSeparateChaining = function (key, value) {
-  const idx = this._hash(key);
-  
-  if (this.keyMap[idx]) {
-    this.keyMap[idx].insertTail([key, value]);
-  } else {
-    const ll = new LinkedList();
-    ll.insertTail([key, value]);
-    this.keyMap[idx] = ll;
-  }
-};
-
-HashTable.prototype.getSeparateChaining = function (key) {
-  const idx = this._hash(key);
-  if (this.keyMap[idx]) {
-    const node = this.keyMap[idx].findNode((val) => val[0] === key)
-    if (node) return node.val[1]
-  }
-};
 
 HashTable.prototype.setLinearProbing = function (key, value) {
   let x = 1
@@ -134,11 +121,16 @@ HashTable.prototype.setLinearProbing = function (key, value) {
     this._setLinearProbingFn()
   }
   
+  // TODO: resize table should be added
+  
+  // if index is already taken
   while (this.keyMap[index]) {
+    // calculate next index
     index = (hashIndex + this.linearProbingFn(x)) % this.tableSize
     x = x + 1
   }
   
+  // set value
   this.keyMap[index] = [key, value]
 }
 
@@ -147,6 +139,7 @@ HashTable.prototype.getLinearProbing = function (key) {
   let hashIndex = this._hash(key)
   let index = hashIndex
   
+  // create linear probing function
   if (!this.linearProbingFn) {
     this._setLinearProbingFn()
   }
@@ -158,6 +151,36 @@ HashTable.prototype.getLinearProbing = function (key) {
   console.log(this.keyMap[index][1])
   return this.keyMap[index][1]
 }
+
+// resolution collisions using separate chaining technique
+HashTable.prototype.setSeparateChaining = function (key, value) {
+  const idx = this._hash(key);
+  
+  if (this.keyMap[idx]) {
+    // add new item
+    this.keyMap[idx].insertTail([key, value]);
+  } else {
+    // create linked list as main DS for storing collisions
+    const ll = new LinkedList();
+    
+    // insert tail
+    ll.insertTail([key, value]);
+    
+    // assign ll to index
+    this.keyMap[idx] = ll;
+  }
+};
+
+HashTable.prototype.getSeparateChaining = function (key) {
+  const idx = this._hash(key);
+  
+  if (this.keyMap[idx]) {
+    // find node in ll
+    const node = this.keyMap[idx].findNode((val) => val[0] === key)
+    // return node value or undefined
+    if (node) return node.val[1]
+  }
+};
 
 HashTable.prototype.containsKey = function (key) {
   const idx = this._hash(key);
