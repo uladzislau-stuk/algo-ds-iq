@@ -38,7 +38,6 @@ class BinarySearchTree {
     // initialize current node as root
     let current = this.root
     
-    // if current is not null or stack is not empty then
     // [5,3,2]
     // [5,3], 2
     // [5], 2,3
@@ -50,6 +49,8 @@ class BinarySearchTree {
     // [] 2,3,4,5,6
     // [7] 2,3,4,5,6
     // [] 2,3,4,5,6,7
+    
+    // if current is null and stack is empty - we checked last node
     while (stack.length || current !== null) {
       if (current !== null) {
         // populate stack
@@ -132,4 +133,6 @@ tree.inOrder()
 tree.inOrderIterative()
 // tree.preOrder()
 // tree.postOrder()
+
+module.exports = BinarySearchTree
 
